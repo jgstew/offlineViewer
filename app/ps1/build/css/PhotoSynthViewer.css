@@ -1,0 +1,164 @@
+#gui {
+	font-family: verdana; 
+	font-size: 13px;
+	width: 1200px;
+	margin: auto;
+}
+
+#gui .loader-info {
+	display: inline-block;
+	margin-left: 3px;
+	display: none; /* hidden for now */
+}
+
+#gui .info-panel {
+	float: left;
+	padding-top: 30px;
+}
+#gui .info-panel ul {
+	list-style-type: none;
+	padding-left: 0px;
+}
+
+#gui .info-panel ul li {
+	margin-bottom: 1px;
+	color: white;
+}
+
+#gui .info-panel ul li p.download object{
+	/*vertical-align: middle;*/
+}
+
+#gui .info-panel ul li p.download div.download{
+	background: url(../../images/download.png) no-repeat;
+	width: 16px;
+	height: 16px;	
+	vertical-align: middle;
+	display: inline-block;
+	cursor: pointer;
+}
+
+
+#gui div.canvas-container {
+	width: 640px;
+	height: 480px;
+	background-color: black;/*#7f7f7f;*/
+	padding-top: 30px;
+}
+
+#gui div.canvas-controller {
+	position: relative;
+	top: 50px;
+}
+
+div.photosynth-panel {
+	width: 171px;
+	height: 290px;
+	position: absolute;
+	top: -245px;
+	left: 455px;
+	font-family: verdana; 
+	font-size: 12px;
+	display: none;
+}
+
+div.photosynth-panel div.top {
+	border: 2px solid #6e6e6e;		
+	border-bottom: 0;
+	border-top-left-radius: 7px;
+	border-top-right-radius: 7px;	
+	background-color: #323232;
+}
+div.photosynth-panel div.bottom {
+	background: url(PhotoSynth/panel/bottom.png) no-repeat;
+	background-position: bottom;
+	height: 19px;
+}
+div.photosynth-panel ul {
+	list-style-type: none;
+	padding: 0;
+	margin-top: 4px;
+	margin-left: 4px;
+	margin-bottom: 0;
+	color: white;
+}
+div.photosynth-panel ul li {
+	padding: 3px;
+	cursor: pointer;
+}
+div.photosynth-panel ul li.activated {
+	color: #b4e800;
+}	
+div.photosynth-panel ul li:hover {
+	background-color: #616e72;
+}
+div.photosynth-panel ul img {
+	vertical-align: middle;
+	margin-right: 10px;
+}
+
+div.photosynth-panel ul li div.icon{
+	vertical-align: middle;
+	margin-right: 10px;
+	width: 60px;		
+	height: 60px;
+	display: inline-block;
+}
+div.photosynth-panel ul li div.threedview{
+	background: url(PhotoSynth/panel/3dview.png);
+}
+div.photosynth-panel ul li.activated div.threedview{
+	background: url(PhotoSynth/panel/3dview.activated.png);
+}
+div.photosynth-panel ul li div.overhead{
+	background: url(PhotoSynth/panel/overhead.png);
+}
+div.photosynth-panel ul li.activated div.overhead{
+	background: url(PhotoSynth/panel/overhead.activated.png);
+}
+div.photosynth-panel ul li div.two2view{
+	background: url(PhotoSynth/panel/2dview.png);
+}
+div.photosynth-panel ul li.activated div.two2view{
+	background: url(PhotoSynth/panel/2dview.activated.png);
+}
+div.photosynth-panel ul li div.pointcloud{
+	background: url(PhotoSynth/panel/pointcloud.png);
+}
+div.photosynth-panel ul li.activated div.pointcloud{
+	background: url(PhotoSynth/panel/pointcloud.activated.png);
+}	
+
+div.photosynth-help {
+	background: url(PhotoSynth/help/background.png);
+	position: absolute;
+	top: -330px;
+	left: -185px;		
+	width: 217px;
+	height: 252px;
+	display: none;
+}
+div.photosynth-help a {
+	color: #b4e800;
+	text-decoration: none;
+	position: relative;
+	font-size: 10px;
+}
+div.photosynth-help a:hover {
+	color: white;
+	text-decoration: underline;		
+}
+div.photosynth-help a.close {
+	top: 6px;
+	left: 193px;
+	cursor: pointer;
+}
+div.photosynth-help a.info {		
+	top: 226px;
+	left: 127px;	
+}
+div.photosynth-help input {
+	position: relative;
+	top: 228px;
+	left: 3px;	
+}	

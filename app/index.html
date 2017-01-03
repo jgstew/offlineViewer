@@ -55,6 +55,7 @@
         var _useCompileJS = false;
     </script>
     <script type="text/javascript" src="ps2/js/embedScripts.js"></script>
+	<script type="text/javascript" src="ps1/js/embedScripts.js"></script>
     <script src="pano/jspanoviewer.js"></script>
     <script src="helpers/external_links.js"></script>
 </head>
@@ -81,7 +82,12 @@
 
     <script>
 
-        const {remote} = require('electron');
+        const {remote} = require('electron');		
+		document.addEventListener("keydown", function (e) {
+			if (e.which === 123) { // F12
+				remote.getCurrentWindow().toggleDevTools();
+			}
+		});		
 
         var serverSubPath='http://127.0.0.1:';
         //Check whether to display decommission notice
@@ -161,14 +167,21 @@
 
         var _container = document.getElementById("viewer-container");
         var _pano_viewer;
+		var _ps1_viewer;
 		var _ps2_viewer;
 
         function dispose_current_viewer(){		
+        	if (_ps1_viewer) {
+                _ps1_viewer.dispose();
+				_ps1_viewer = null;
+            }		
         	if (_ps2_viewer) {
                 _ps2_viewer.dispose();
+				_ps2_viewer = null;
             }
             if (_pano_viewer) {
                 _pano_viewer.dispose();
+				_pano_viewer = null;
             }
             _container.style.display = 'block';
             document.getElementById('instructions').style.display = 'none';
@@ -243,12 +256,18 @@
                 },
                 onError: function(e) {
                 }
-            });			
+            });
 		}
-		
+
 		function LoadPS1(path) {
-			dispose_current_viewer();			
-			dialog.showErrorBox('Unable to load PS1.', 'PS1 loading is not implemented yet.');
+			dispose_current_viewer();
+			
+			//dialog.showErrorBox('Unable to load PS1.', 'PS1 loading is not implemented yet.');
+			_ps1_viewer = new Photosynth.PS1Viewer(_container, {
+                width: window.innerWidth,
+                height: window.innerHeight,
+			});
+            _ps1_viewer.load(path + '/');
 		}
 
         function LoadPS2(path) {
