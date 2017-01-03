@@ -8,7 +8,9 @@ npm run release
 ```
 After building, the installer will be in the `dist` directory.  A portable distribution will be there as well.
 ### Folder Structure
-`app/synth` contains the photosynth viewer
+`app/ps1` contains the photosynth 1 viewer (based on chrome extension experiment)
+
+`app/ps2` contains the photosynth 2 viewer (technical preview)
 
 `app/pano/jspanoviewer.js` contains the panorama viewer
 
