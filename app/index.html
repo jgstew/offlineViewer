@@ -160,13 +160,12 @@
         }
 
         var _container = document.getElementById("viewer-container");
-        //synth viewer
-        var _viewer;
         var _pano_viewer;
+		var _ps2_viewer;
 
-        function dispose_current_viewer(){
-        	if (_viewer) {
-                _viewer.dispose();
+        function dispose_current_viewer(){		
+        	if (_ps2_viewer) {
+                _ps2_viewer.dispose();
             }
             if (_pano_viewer) {
                 _pano_viewer.dispose();
@@ -174,9 +173,48 @@
             _container.style.display = 'block';
             document.getElementById('instructions').style.display = 'none';
         }
-
-        //check existance of 0.json and path.bin before proceeding to load the photosynth
-        function checkAndLoad(path) {
+				
+		function checkAndLoad(path) {		
+			if (path.indexOf(".pano") != -1) {
+				LoadPanorama(path);
+			} else {
+				GetSynthType(path, function(type) {
+					if (type == "PS1") {
+						LoadPS1(path);
+					} else if (type == "PS2") {
+						LoadPS2(path);
+					} else {
+						dialog.showErrorBox('Unable to recognize synth type.', 'This is not a panorama or a PS1 or a PS2 file.');
+					}
+				});
+			}
+        }
+		
+		function GetSynthType(path, onComplete) {
+            var path_bin_file = path.split('\\').join('/') + "/path.bin";
+			
+			// If path.bin file exist then it's a PS2.
+			// Otherwise if soap.xml exist then it's a PS1.
+			// Lastly if neither of these 2 files exists then it's an unknown file.
+			new PS.Utils.Request(path_bin_file, {
+				onComplete: function(xhr) {
+					onComplete("PS2");
+				},
+				onError: function() {
+					var soal_xml_file = path.split('\\').join('/') + "/soap.xml";
+					new PS.Utils.Request(soal_xml_file, {
+						onComplete: function(xhr) {
+							onComplete("PS1");
+						},
+						onError: function() {
+							onComplete("Unknown");
+						}
+					});
+				}
+			});
+		}
+		
+		function LoadPanorama(path) {
             var subPath = '/formats/cubemap/cubemap.json';
             var jsonPath = path.split('\\').join('/') + subPath;
             new PS.Utils.Request(jsonPath, {
@@ -204,43 +242,19 @@
                     });
                 },
                 onError: function(e) {
-                    checkAndLoadSynth();
                 }
-            });
+            });			
+		}
+		
+		function LoadPS1(path) {
+			dispose_current_viewer();			
+			dialog.showErrorBox('Unable to load PS1.', 'PS1 loading is not implemented yet.');
+		}
 
-
-            var onePassed = false;
-            var oneFailed = false;
-
-            function checkAndLoadSynth() {
-
-                checkFile('0.json');
-                checkFile('path.bin');
-
-                function checkFile(fileName) {
-                    new PS.Utils.Request(path + "/" + fileName, {
-                        onComplete: function(xhr) {
-                            if (onePassed) {
-                                loadFromPath(path);
-                            }
-                            onePassed = true;
-                        },
-                        onError: function(e) {
-                            dialog.showErrorBox('Unable to load as Photosynth', fileName + ' is required inside the Photosynth ZIP archive');
-                            if (!oneFailed) {
-                                dialog.showErrorBox('Unable to load as panorama', subPath + ' is required inside the panorama archive')
-                            }
-                            oneFailed = true;
-                        }
-                    });
-                }
-            }
-        }
-
-        function loadFromPath(path) {
+        function LoadPS2(path) {
             dispose_current_viewer();
 
-            _viewer = new Photosynth.PS2Viewer(_container, {
+            _ps2_viewer = new Photosynth.PS2Viewer(_container, {
                 width: window.innerWidth,
                 height: window.innerHeight,
                 autoStart: false,
@@ -250,8 +264,8 @@
                 debugMenuEnabled: true
             });
             //create the annotation viewer
-            //(you need to create the annotation viewer before loading a synth = before calling _viewer.loadGuid)
-            var _annotationViewer = new Photosynth.PS2AnnotationViewer(_viewer, {
+            //(you need to create the annotation viewer before loading a synth = before calling _ps2_viewer.loadGuid)
+            var _annotationViewer = new Photosynth.PS2AnnotationViewer(_ps2_viewer, {
                 editEnabled: false,
                 visibleInFullscreen: true
             });
@@ -276,7 +290,7 @@
             });
 
             //load the synth in the viewer
-            _viewer.load(path + '/', {
+            _ps2_viewer.load(path + '/', {
                 startCameraIndex: -1
             });
         }
