@@ -6,16 +6,10 @@ Photosynth.PS1Viewer = function(container, options) {
 	var _options = options || {};	
 	var _viewer;	
 	
-	this.load = function(root_url) {
-		var elements = root_url.split(".zip")[0].split("/");
-		elements = elements[elements.length-1].split("\\");
-		var guid = elements[elements.length-1];
-		
-		console.log(root_url + " -> " + guid);
-		
+	this.load = function(root_url) {		
 		CreateHtmlComponents(_container);
 		_viewer = new PhotoSynthViewer(document.getElementById("gui"));
-		_viewer.load(root_url, guid);
+		_viewer.load(root_url);
 	};
 	
 	function CreateHtmlComponents(parent) {

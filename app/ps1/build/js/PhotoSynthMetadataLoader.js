@@ -15,13 +15,12 @@ function JsonInfo() {
 	this.thumbs;
 }
 
-function PhotoSynthMetadataLoader(root_url, guid, worker, options) {
+function PhotoSynthMetadataLoader(root_url, worker, options) {
 	var _onComplete = options.onComplete || function() {};
 	var _onProgress = options.onProgress || function() {};
 	var _onError    = options.onError    || function() {};
 	var _soapInfo   = new SoapInfo();
 	var _jsonInfo   = new JsonInfo();
-	_soapInfo.guid = guid;
 	
 	const LOADING_SOAP       = 0;
 	const LOADING_JSON       = 1;
@@ -111,24 +110,26 @@ function PhotoSynthMetadataLoader(root_url, guid, worker, options) {
 		return isLoaded;
 	};
 	
-	loadMetadata(root_url, guid);
+	loadMetadata(root_url);
 	
-    function loadMetadata(root_url, guid) {
+    function loadMetadata(root_url) {
 		_state = LOADING_SOAP;
 		_onProgress(_that);
-		parseSoap(root_url, guid, function() {
-			_state = LOADING_JSON;
-			_onProgress(_that);
-			parseJson(root_url, guid, function() {
-				_state = LOADING_COLLECTION;
+		parseProperties(root_url, function() {
+			parseSoap(root_url, function() {
+				_state = LOADING_JSON;
 				_onProgress(_that);
-				parseCollection(root_url, function() {
-					_state = LOADED;
+				parseJson(root_url, function() {
+					_state = LOADING_COLLECTION;
 					_onProgress(_that);
-					_onComplete(_that);
+					parseCollection(root_url, function() {
+						_state = LOADED;
+						_onProgress(_that);
+						_onComplete(_that);
+					});
 				});
 			});
-		});	
+		});
 	}
 	
 	function getNbImage(obj) {
@@ -168,8 +169,18 @@ function PhotoSynthMetadataLoader(root_url, guid, worker, options) {
 		};
 		xhr.send();
 	}
+
+	function parseProperties(root_url, onPropertiesParsed) {
+		PS.Utils.Request(root_url + "properties.json", {
+			onComplete: function(xhr) {
+				var json = JSON.parse(xhr.responseText);
+				_soapInfo.guid = json.Id;
+				onPropertiesParsed();
+			}
+		});
+	}
 	
-	function parseSoap(root_url, guid, onSoapParsed) {
+	function parseSoap(root_url, onSoapParsed) {
 		var xhr = new XMLHttpRequest();		
 		xhr.open("GET", root_url + "soap.xml", true);
 		xhr.overrideMimeType('text/xml');
@@ -198,7 +209,7 @@ function PhotoSynthMetadataLoader(root_url, guid, worker, options) {
 		return a;
 	}
 	
-	function parseJson(root_url, guid, onJsonParsed) {
+	function parseJson(root_url, onJsonParsed) {
 		
 		PS.Utils.Request(root_url + "0.json", {
 			onComplete: function(xhr) {
@@ -207,10 +218,9 @@ function PhotoSynthMetadataLoader(root_url, guid, worker, options) {
 				_jsonInfo.version = result["_json_synth"];
 				
 				var root;
-				if (!result["l"][guid])
-					root = result["l"][""];
-				else
+				for (var guid in result["l"]) {
 					root = result["l"][guid];
+				}
 				
 				var nbPicture = parseInt(root["_num_images"], 10);
 				var nbCoordSystem = parseInt(root["_num_coord_systems"], 10);

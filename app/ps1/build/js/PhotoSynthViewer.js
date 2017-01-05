@@ -756,7 +756,7 @@ function PhotoSynthViewer(div) {
 		_planes = [];
 	}	
 	
-	this.load = function(root_url, guid) {
+	this.load = function(root_url) {
 		
 		var loaderInfo = _div.getElementsByClassName("loader-info")[0];
 		loaderInfo.innerHTML = _imgLoading;
@@ -764,7 +764,7 @@ function PhotoSynthViewer(div) {
 		var infoPanel = _div.getElementsByClassName("info-panel")[0];
 		infoPanel.innerHTML = "";
 		
-		_loader = new PhotoSynthMetadataLoader(root_url, guid, _worker, {
+		_loader = new PhotoSynthMetadataLoader(root_url, _worker, {
 			onComplete : function() {
 				loaderInfo.innerHTML = "Loaded";
 			},
