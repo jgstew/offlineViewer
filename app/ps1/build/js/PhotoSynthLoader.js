@@ -171,47 +171,18 @@ function PhotoSynthLoader(metadataLoader, coordSystemIndex, options) {
 	}
 	
 	function downloadBinFile(collectionRoot, coordSystemIndex, binFileIndex) {
-		
-		//Ajax call supporting binary mode
-		//var url = "ajax/download.php?url="+encodeURI(collectionRoot + "points_" + coordSystemIndex + "_" + binFileIndex + ".bin");		
-		
 		var url = collectionRoot + "points_" + coordSystemIndex + "_" + binFileIndex + ".bin";
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", url, true);
 		xhr.responseType = "arraybuffer";
-		xhr.onload = function() {
-			
+		xhr.onload = function() {			
 			_worker.postMessage({
 				"type": "parsePhotoSynthBinFile",
 				"coordSystemIndex": coordSystemIndex,
 				"binFileIndex": binFileIndex,
 				"response": xhr.response	
 			}, [xhr.response]);
-			
-			/*
-			var result = parsePhotoSynthBinFile(xhr.response);
-			var binFile = _metadataLoader.getCoordSystem(coordSystemIndex).binFiles[binFileIndex];			
-			binFile["positions"] = result.positions;
-			binFile["colors"]    = result.colors;
-			binFile["viewList"]  = result.viewList;
-			binFile["nbTracks"]  = result.nbTracks;
-			binFile.loaded       = true;
-			updateDownloadProgress(coordSystemIndex, binFileIndex);		
-			*/
 		};
-		xhr.send();		
-				
-		/*
-		var url = collectionRoot + "points_" + coordSystemIndex + "_" + binFileIndex + ".bin";
-		chrome.extension.sendRequest({'action' : 'downloadBinFile', 'url' : url}, function(result) {
-			var binFile = _metadataLoader.getCoordSystem(coordSystemIndex).binFiles[binFileIndex];
-			binFile["positions"] = result.positions;
-			binFile["colors"]    = result.colors;
-			binFile["viewList"]  = result.viewList;
-			binFile["nbTracks"]  = result.nbTracks;
-			binFile.loaded       = true;
-			updateDownloadProgress(coordSystemIndex, binFileIndex);
-		});	
-		*/
+		xhr.send();
 	}		
 }
