@@ -171,7 +171,7 @@ function PhotoSynthLoader(metadataLoader, coordSystemIndex, options) {
 	}
 	
 	function downloadBinFile(collectionRoot, coordSystemIndex, binFileIndex) {
-		var url = collectionRoot + "points_" + coordSystemIndex + "_" + binFileIndex + ".bin";
+		var url = collectionRoot + "points/points_" + coordSystemIndex + "_" + binFileIndex + ".bin";
 		var xhr = new XMLHttpRequest();
 		xhr.open("GET", url, true);
 		xhr.responseType = "arraybuffer";

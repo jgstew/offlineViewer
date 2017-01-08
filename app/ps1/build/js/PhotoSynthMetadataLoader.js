@@ -191,7 +191,7 @@ function PhotoSynthMetadataLoader(root_url, worker, options) {
 				_soapInfo.collectionType = xml.getElementsByTagName("CollectionType")[0].firstChild.nodeValue == "Synth" ? "synth" : "pano";
 				_soapInfo.dzcUrl         = xml.getElementsByTagName("DzcUrl")[0].firstChild.nodeValue.replace("http://", "https://");
 				_soapInfo.jsonUrl        = xml.getElementsByTagName("JsonUrl")[0].firstChild.nodeValue.replace("http://", "https://");
-				_soapInfo.collectionRoot = xml.getElementsByTagName("CollectionRoot")[0].firstChild.nodeValue.replace("http://", "https://");
+				_soapInfo.collectionRoot = root_url;
 				_soapInfo.privacyLevel   = xml.getElementsByTagName("PrivacyLevel")[0].firstChild.nodeValue;
 				onSoapParsed();	
 			}
