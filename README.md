@@ -16,3 +16,8 @@ After building, the installer will be in the `dist` directory.  A portable distr
 
 `app/zip_server.js` contains the code for reading from zip files
 
+
+### Related:
+- https://twitter.com/jgstew/status/1118936773558538241
+- https://github.com/alicevision/meshroom
+  - https://twitter.com/kaflurbaleen/status/1118938053626564608
